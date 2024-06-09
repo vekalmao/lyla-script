@@ -1,36 +1,21 @@
-# ddos-guardian
-- To Config Everything Please Head over To .env 
+# LylaNodes DDos Script
 
 
-- To View Our Docs To Explain Stuff Please Head Over to https://ddosguardian.xyz for more information regarding This company
 
-## Requirements
+- See our docs at ddos.lylascript.xyz
+
+## Perms
 * Node JS
 
 * Nginx
 
-* 1GB Ram
+## How To download
+* Download ddos_lylanodes.sh or copy and paste it into the vps.
 
-* 3GB Storage
+* run: chmod +x ddos_lylanodes.sh
 
-* Root Permission
+* then Run: ./ddos_lylanodes.sh
 
-## How To Install
-* download setup_ddosguardian_service.sh and drag into the root Directory Then
+* then use systemctl status lylanodes
 
-* run: chmod +x setup_ddosguardian_service.sh
 
-* then Run: ./setup_ddosguardian_service.sh
-
-* then You may go to /etc/ddosguardian and edit the .env to your liking
-
-* if you got any issues please Make a issues Ticket or Join https://discord.gg/relationalhosting
-
-### Features
-- WAF
-
-- Firewall
-
-- Performence
-
-- ddos protection
