@@ -114,3 +114,4 @@ sysctl -p
 
 echo -e "\033[0;32m[ LylaNodes DDos Protection Script Works! ]\033[0m"
 echo -e "\033[0;32m[ Made by LylaNodes Hosting ] !\033[0m"
+echo -e "\033[0;32m[ Use systemctl status lylanodes, to see if it's running. ] !\033[0m"
