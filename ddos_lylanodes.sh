@@ -56,32 +56,21 @@ iptables-save > /etc/iptables/rules.backup
 cat <<EOF > /etc/lylanodes-protection/firewall.sh
 #!/bin/bash
 
-# Clear existing rules and chains
 iptables -F
 iptables -X
 
-# Set default policies
 iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT ACCEPT
 
-# Allow loopback traffic
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
-# Allow established and related connections
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# Whitelist IP address 10.150.0.9
-iptables -A INPUT -s 10.150.0.9 -j ACCEPT
-
-# Allow traffic from 172.18.0.7 to port 25592
-iptables -A INPUT -s 172.18.0.7 -p tcp --dport 25592 -m conntrack --ctstate NEW -j ACCEPT
-
-# Allow SSH (port 22) connections
 iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
 
-# Allow HTTP (port 80) and HTTPS (port 443) connections
+# Allow HTTP and HTTPS connections
 iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT
 
@@ -89,28 +78,20 @@ iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -p tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -p tcp --dport 2022 -m conntrack --ctstate NEW -j ACCEPT
 
-# Limit maximum number of TCP connections per IP
 iptables -A INPUT -p tcp --syn -m connlimit --connlimit-above 10 -j REJECT
 
-# Limit ICMP echo requests
 iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s --limit-burst 3 -j ACCEPT
 
-# Drop invalid packets
 iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 
-# Drop packets with all TCP flags unset
 iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
 
-# Drop packets with all TCP flags set
 iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
 
-# Log all other incoming packets
 iptables -A INPUT -j LOG --log-prefix "iptables: " --log-level 4
 
-# Allow all outgoing traffic
 iptables -A OUTPUT -j ACCEPT
 
-# Save rules
 iptables-save > /etc/iptables/rules.v4
 EOF
 
