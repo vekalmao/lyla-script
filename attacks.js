@@ -6,7 +6,7 @@ const net = require('net');
 const dgram = require('dgram');
 const http = require('http');
 const url = require('url');
-const rateLimit = require('express-rate-limit');
+
 
 const MAX_CONNECTIONS_PER_IP = 100;
 const CONNECTION_TIMEOUT = 60000;
@@ -143,18 +143,7 @@ app.use((req, res, next) => {
     }
 });
 
-const limiter = rateLimit({
-    windowMs: 60 * 1000, 
-    max: MAX_REQUESTS_PER_MINUTE, 
-    onLimitReached: (req, res, options) => {
-        const remoteAddress = req.connection.remoteAddress;
-        console.log(`DDoS attack detected from ${remoteAddress}. Requests per minute exceeded`);
-        logDDoSAttack(remoteAddress, MAX_REQUESTS_PER_MINUTE);
-        addToBlacklist(remoteAddress);
-    }
-});
 
-app.use(limiter);
 
 
 app.use((req, res) => {
@@ -162,6 +151,6 @@ app.use((req, res) => {
     proxy.web(req, res, { target: `${target}${req.url}` });
 });
 
-app.listen(57756, () => {
-    console.log('HTTP server with Layer 7 protection is listening on port 25565');
+app.listen(5587, () => {
+    console.log('HTTP server with Layer 7 protection is listening on port 5587');
 });
