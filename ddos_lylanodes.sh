@@ -28,6 +28,7 @@ npm install fs
 npm install net
 npm install dgram
 npm install express-rate-limit
+npm install child_process
 
 cat <<EOF > /etc/systemd/system/lylanodes.service
 [Unit]
