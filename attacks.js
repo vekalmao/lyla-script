@@ -7,7 +7,6 @@ const dgram = require('dgram');
 const http = require('http');
 const url = require('url');
 
-
 const MAX_CONNECTIONS_PER_IP = 100;
 const CONNECTION_TIMEOUT = 60000;
 const BLACKLIST_TIMEOUT = 300000;
@@ -93,7 +92,6 @@ const tcpServer = net.createServer(socket => {
     applyFirewallRules(socket, remoteAddress);
 });
 
-
 const udpServer = dgram.createSocket('udp4');
 udpServer.on('error', (err) => {
     console.error(`UDP server error:\n${err.stack}`);
@@ -106,19 +104,17 @@ udpServer.on('message', (msg, rinfo) => {
 });
 udpServer.on('listening', () => {
     const address = udpServer.address();
-    console.log(`UDP server listening ${35.221.60.158.address}:${35.221.60.158.port}`);
+    console.log(`UDP server listening on address: ${address.address}, port: ${address.port}`);
 });
-udpServer.bind();
+udpServer.bind(25567);
 
-const PORT = 0; 
+const PORT = 25567; 
 tcpServer.listen(PORT, () => {
-    console.log(`TCP server is listening on all available ports`);
+    console.log(`TCP server is listening on port ${PORT}`);
 });
-
 
 const app = express();
 const proxy = httpProxy.createProxyServer({});
-
 
 app.use((req, res, next) => {
     const remoteAddress = req.connection.remoteAddress;
@@ -142,9 +138,6 @@ app.use((req, res, next) => {
         next();
     }
 });
-
-
-
 
 app.use((req, res) => {
     const target = 'http://localhost';
