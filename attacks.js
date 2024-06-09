@@ -106,7 +106,7 @@ udpServer.on('message', (msg, rinfo) => {
 });
 udpServer.on('listening', () => {
     const address = udpServer.address();
-    console.log(`UDP server listening ${address.address}:${address.port}`);
+    console.log(`UDP server listening ${address.address}:25565`);
 });
 udpServer.bind();
 
