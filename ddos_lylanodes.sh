@@ -18,10 +18,16 @@ if ! command -v node &> /dev/null; then
     apt install -y nodejs
 fi
 
-npm install
-
 apt update
 apt upgrade -y
+
+# Install required Node.js modules
+npm install express
+npm install http-proxy
+npm install fs
+npm install net
+npm install dgram
+npm install express-rate-limit
 
 cat <<EOF > /etc/systemd/system/lylanodes.service
 [Unit]
