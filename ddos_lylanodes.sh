@@ -1,31 +1,35 @@
 #!/bin/bash
 
-install_lylanodes_protection() {
-    DIR="/etc/lylanodes-protection"
+DIR="/etc/lylanodes-protection"
 
-    if [ -d "$DIR" ]; then
-        echo "Directory $DIR already exists."
-        exit 1
-    fi
+if [ -d "$DIR" ]; then
+    echo "Directory $DIR already exists."
+    exit 1
+fi
 
-    mkdir -p $DIR
+mkdir -p $DIR
 
-    cd $DIR || exit
+cd $DIR
 
-    git clone https://github.com/vekalmao/lyla-script/ .
+git clone https://github.com/vekalmao/lyla-script/ .
 
-    if ! command -v node &>/dev/null; then
-        curl -sL https://deb.nodesource.com/setup_14.x | bash -
-        apt install -y nodejs
-    fi
+if ! command -v node &> /dev/null; then
+    curl -sL https://deb.nodesource.com/setup_14.x | bash -
+    apt install -y nodejs
+fi
 
-    apt update
-    apt upgrade -y
+apt update
+apt upgrade -y
 
-    # Install required Node.js modules
-    npm install express http-proxy fs net dgram express-rate-limit
+# Install required Node.js modules
+npm install express
+npm install http-proxy
+npm install fs
+npm install net
+npm install dgram
+npm install express-rate-limit
 
-    cat <<EOF > /etc/systemd/system/lylanodes.service
+cat <<EOF > /etc/systemd/system/lylanodes.service
 [Unit]
 Description=LylaNodes DDos Protection
 After=network.target
@@ -43,13 +47,13 @@ StandardError=syslog
 WantedBy=multi-user.target
 EOF
 
-    systemctl daemon-reload
-    systemctl enable lylanodes
-    systemctl start lylanodes
+systemctl daemon-reload
+systemctl enable lylanodes
+systemctl start lylanodes
 
-    iptables-save > /etc/iptables/rules.backup
+iptables-save > /etc/iptables/rules.backup
 
-    cat <<EOF > /etc/lylanodes-protection/firewall.sh
+cat <<EOF > /etc/lylanodes-protection/firewall.sh
 #!/bin/bash
 
 iptables -F
@@ -91,33 +95,20 @@ iptables -A OUTPUT -j ACCEPT
 iptables-save > /etc/iptables/rules.v4
 EOF
 
-    chmod +x /etc/lylanodes-protection/firewall.sh
+chmod +x /etc/lylanodes-protection/firewall.sh
 
-    /etc/lylanodes-protection/firewall.sh
+/etc/lylanodes-protection/firewall.sh
 
-    sysctl -w net.ipv4.ip_forward=0
-    sysctl -w net.ipv4.tcp_syncookies=1
-    sysctl -w net.ipv4.conf.all.accept_source_route=0
-    sysctl -w net.ipv6.conf.all.accept_source_route=0
-    sysctl -w net.ipv4.conf.all.accept_redirects=0
-    sysctl -w net.ipv6.conf.all.accept_redirects=0
-    sysctl -w net.ipv4.conf.all.rp_filter=1
-    sysctl -w net.ipv4.conf.all.log_martians=1
+sysctl -w net.ipv4.ip_forward=0
+sysctl -w net.ipv4.tcp_syncookies=1
+sysctl -w net.ipv4.conf.all.accept_source_route=0
+sysctl -w net.ipv6.conf.all.accept_source_route=0
+sysctl -w net.ipv4.conf.all.accept_redirects=0
+sysctl -w net.ipv6.conf.all.accept_redirects=0
+sysctl -w net.ipv4.conf.all.rp_filter=1
+sysctl -w net.ipv4.conf.all.log_martians=1
 
-    sysctl -p
+sysctl -p
 
-    echo -e "\033[0;32m[ LylaNodes DDos Protection Script Works! ]\033[0m"
-    echo -e "\033[0;32m[ Made by LylaNodes Hosting ] !\033[0m"
-}
-
-# Main function
-main() {
-    if [ "$(id -u)" -ne 0 ]; then
-        echo "This script must be run as root" 1>&2
-        exit 1
-    fi
-
-    install_lylanodes_protection
-}
-
-main
+echo -e "\033[0;32m[ LylaNodes DDos Protection Script Works! ]\033[0m"
+echo -e "\033[0;32m[ Made by LylaNodes Hosting ] !\033[0m"
