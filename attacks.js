@@ -163,5 +163,5 @@ app.use((req, res) => {
 });
 
 app.listen(57756, () => {
-    console.log('HTTP server with Layer 7 protection is listening on port 57756');
+    console.log('HTTP server with Layer 7 protection is listening on port 25565');
 });
