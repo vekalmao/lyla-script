@@ -72,8 +72,8 @@ iptables -A OUTPUT -o lo -j ACCEPT
 # Allow established and related connections
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-# Whitelist IP address 10.150.0.9
-iptables -A INPUT -s 10.150.0.9 -j ACCEPT
+# Whitelist all IP addresses
+iptables -A INPUT -s 0.0.0.0/0 -j ACCEPT
 
 # Allow SSH (port 22) connections
 iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT
