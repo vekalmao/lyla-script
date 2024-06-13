@@ -98,26 +98,29 @@ uninstall_lylanodes_protection() {
     echo "LylaNodes Protection Uninstallation complete"
 }
 
-# Main menu
-while true; do
-    echo "Choose what to do:"
-    echo "1. Install LylaNodes Protection"
-    echo "2. Uninstall LylaNodes Protection"
-    read -p "Enter your choice (1 or 2): " choice
+# Main menu function
+main_menu() {
+    while true; do
+        echo "Choose what to do:"
+        echo "1. Install LylaNodes Protection"
+        echo "2. Uninstall LylaNodes Protection"
+        read -p "Enter your choice (1 or 2): " choice
 
-    case $choice in
-        1)
-            install_lylanodes_protection
-            break
-            ;;
-        2)
-            uninstall_lylanodes_protection
-            break
-            ;;
-        *)
-            echo "Invalid choice. Please enter 1 or 2."
-            ;;
-    esac
-done
+        case $choice in
+            1)
+                install_lylanodes_protection
+                return 0
+                ;;
+            2)
+                uninstall_lylanodes_protection
+                return 0
+                ;;
+            *)
+                echo "Invalid choice. Please enter 1 or 2."
+                ;;
+        esac
+    done
+}
 
-exit 0
+# Call the main menu function
+main_menu
