@@ -99,7 +99,7 @@ EOF
     
     cd /etc/nginx/conf.d/
 
-    curl -Lo ddos.lua https://raw.githubusercontent.com/vekalmao/lyla-script-layer-7/main/protect.lua
+    curl -Lo protect.lua https://raw.githubusercontent.com/vekalmao/lyla-script-layer-7/main/protect.lua
     
     sudo apt-get install libnginx-mod-http-lua
     
