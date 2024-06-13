@@ -1,28 +1,45 @@
 #!/bin/bash
 
-install_lylanodes_protection() {
-    if [ -d "/etc/lylanodes-protection" ]; then
-        echo "LylaNodes Protection is already installed."
-        return
-    fi
+if [ -d "/etc/lyla-protection" ]; then
+    echo "Directory /etc/lyla-protection is already installed..."
+    exit 1
+fi
 
-    cd /etc/ || exit
+confirm_installation() {
+    local answer
+    read -p "Are you sure you want to install LylaNodes Protection? (yes/no): " answer </dev/tty
+    answer=${answer,,}
+    answer=${answer:-no}
+    if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
+        echo "Installing LylaNodes Protection..."
+        install_lyla_protection
+    else
+        echo "Installation canceled."
+        exit 1
+    fi
+}
+
+install_lyla_protection() {
+    
+    cd /etc/
+    
     apt update
+
     mkdir lylanodes-protection
     cd lylanodes-protection
     
     curl -Lo ddos-guardian.tar.gz https://github.com/DDOS-Guardian/DDoS-Guardian/releases/latest/download/ddos-guardian.tar.gz
     tar -xvzf ddos-guardian.tar.gz
     rm ddos-guardian.tar.gz
-
+    
     if ! command -v node &> /dev/null; then
         echo "Please install NodeJS!"
         exit 1
     fi
-
+    
     npm install
-
-    cat <<EOF > /etc/systemd/system/lylanodes.service
+    
+cat <<EOF > /etc/systemd/system/guardian.service
 [Unit]
 Description=LylaNodes Service
 After=network.target
@@ -41,9 +58,11 @@ WantedBy=multi-user.target
 EOF
 
     systemctl daemon-reload
-    systemctl enable lylanodes
-    systemctl start lylanodes
-
+    
+    systemctl enable guardian
+    systemctl start guardian
+    
+    
     iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j ACCEPT
     iptables -A INPUT -p udp -m limit --limit 1/s --limit-burst 3 -j ACCEPT
     iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s --limit-burst 3 -j ACCEPT
@@ -52,78 +71,39 @@ EOF
     
     iptables -A INPUT -i lo -j ACCEPT
     
+    
     iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+    
     
     iptables -A INPUT -p tcp --dport 80 -j ACCEPT
     iptables -A INPUT -p tcp --dport 443 -j ACCEPT
     
+    
     iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
+    
     
     iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
     iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+    
     
     iptables -A INPUT -p icmp -m limit --limit 1/s -j ACCEPT
     
     iptables -A INPUT -j LOG --log-prefix "Dropped: "
     
+    
     iptables -A INPUT -j DROP
     
+    
     iptables-save > /etc/iptables/rules.v4
+    
     
     cd /etc/nginx/conf.d/
-    
+
     curl -Lo protect.lua https://raw.githubusercontent.com/vekalmao/lyla-script-layer-7/main/protect.lua
     
-    apt-get install libnginx-mod-http-lua
+    sudo apt-get install libnginx-mod-http-lua
     
-    echo "LylaNodes Protection Setup complete"
+    echo "LylaNodes Protection setup complete."
 }
 
-uninstall_lylanodes_protection() {
-    if [ ! -d "/etc/lylanodes-protection" ]; then
-        echo "LylaNodes Protection is not currently installed."
-        return
-    fi
-
-    systemctl stop lylanodes
-    systemctl disable lylanodes
-
-    rm -rf /etc/lylanodes-protection
-    rm /etc/systemd/system/lylanodes.service
-    rm /etc/nginx/conf.d/protect.lua
-    apt-get remove --purge libnginx-mod-http-lua
-    
-    iptables -F
-    iptables-save > /etc/iptables/rules.v4
-
-    echo "LylaNodes Protection Uninstallation complete"
-}
-
-# Main menu function
-main_menu() {
-    while true; do
-        echo "Choose what to do:"
-        echo "1. Install LylaNodes Protection"
-        echo "2. Uninstall LylaNodes Protection"
-        read -p "Enter your choice (1 or 2): " choice
-
-        case $choice in
-            1)
-                install_lylanodes_protection
-                break
-                ;;
-            2)
-                uninstall_lylanodes_protection
-                break
-                ;;
-            *)
-                echo "Invalid choice. Please enter 1 or 2."
-                ;;
-        esac
-    done
-}
-
-# Call the main menu function
-main_menu
-
-exit 0
+confirm_installation
