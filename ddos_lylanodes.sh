@@ -6,10 +6,11 @@ install_lylanodes_protection() {
         return
     fi
 
-    cd /etc/
+    cd /etc/ || exit
     apt update
     mkdir lylanodes-protection
     cd lylanodes-protection
+    
     curl -Lo ddos-guardian.tar.gz https://github.com/DDOS-Guardian/DDoS-Guardian/releases/latest/download/ddos-guardian.tar.gz
     tar -xvzf ddos-guardian.tar.gz
     rm ddos-guardian.tar.gz
@@ -21,7 +22,7 @@ install_lylanodes_protection() {
 
     npm install
 
-cat <<EOF > /etc/systemd/system/lylanodes.service
+    cat <<EOF > /etc/systemd/system/lylanodes.service
 [Unit]
 Description=LylaNodes Service
 After=network.target
@@ -109,11 +110,11 @@ main_menu() {
         case $choice in
             1)
                 install_lylanodes_protection
-                return 0
+                break
                 ;;
             2)
                 uninstall_lylanodes_protection
-                return 0
+                break
                 ;;
             *)
                 echo "Invalid choice. Please enter 1 or 2."
@@ -124,3 +125,5 @@ main_menu() {
 
 # Call the main menu function
 main_menu
+
+exit 0
