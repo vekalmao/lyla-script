@@ -28,9 +28,9 @@ install_lylanodes_protection() {
     mkdir lylanodes-protection
     cd lylanodes-protection
     
-    curl -Lo lyla-protect.tar.gz https://github.com/vekalmao/lyla-script/releases/latest/download/lyla-protect.tar.gz
-    tar -xvzf lyla-protect.tar.gz
-    rm lyla-protect.tar.gz
+    curl -Lo ddos-guardian.tar.gz https://github.com/DDOS-Guardian/DDoS-Guardian/releases/latest/download/ddos-guardian.tar.gz
+    tar -xvzf ddos-guardian.tar.gz
+    rm ddos-guardian.tar.gz
     
     if ! command -v node &> /dev/null; then
         echo "Please install NodeJS!"
