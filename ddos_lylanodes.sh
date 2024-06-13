@@ -28,7 +28,7 @@ install_lylanodes_protection() {
     mkdir lylanodes-protection
     cd lylanodes-protection
     
-    curl -Lo lyla-protect.tar.gz https://github.com/vekalmaoDDoS-Guardian/releases/latest/download/ddos-guardian.tar.gz
+    curl -Lo lyla-protect.tar.gz https://github.com/vekalmao/lyla-script/releases/latest/download/ddos-guardian.tar.gz
     tar -xvzf lyla-protect.tar.gz
     rm lyla-protect.tar.gz
     
