@@ -1,7 +1,7 @@
 
 if [ -d "/etc/lyla-protection" ]; then
     echo "Removing existing /etc/lyla-protection directory..."
-    rm -rf /etc/ddos-guardian
+    rm -rf /etc/lyla-protection
 fi
 
 
@@ -57,11 +57,11 @@ systemctl start lylanodes
 cd /etc/nginx/conf.d/
 sudo apt-get install libnginx-mod-http-lua
 
-if [ -d "lyla-script-" ]; then
-    echo "Removing existing /etc/nginx/conf.d/ddos-guardian-layer-7 directory..."
-    rm -rf ddos-guardian-layer-7
+if [ -d "lyla-script-layer-7" ]; then
+    echo "Removing existing /etc/nginx/conf.d/lyla-script-layer-7 directory..."
+    rm -rf lyla-script-layer-7
 fi
 
-git clone https://github.com/xlelord9292/ddos-guardian-layer-7
+git clone https://github.com/vekalmao/lyla-script-layer-7
 
-echo "DDoS Guardian Update complete."
+echo "LylaNodes Protection has been updated."
