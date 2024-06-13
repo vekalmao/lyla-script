@@ -1,25 +1,11 @@
 #!/bin/bash
 
-if [ -d "/etc/lylanodes-protection" ]; then
-    echo "Directory /etc/lylanodes-protection is already installed..."
-    exit 1
-fi
-
-confirm_installation() {
-    local answer
-    read -p "Are you sure you want to install LylaNodes Protection? (yes/no): " answer </dev/tty
-    answer=${answer,,}
-    answer=${answer:-no}
-    if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
-        echo "Installing LylaNodes Protection..."
-        install_lylanodes_protection
-    else
-        echo "Installation canceled."
-        exit 1
-    fi
-}
-
 install_lylanodes_protection() {
+    if [ -d "/etc/lylanodes-protection" ]; then
+        echo "LylaNodes Protection is already installed."
+        return
+    fi
+
     cd /etc/
     apt update
     mkdir lylanodes-protection
@@ -93,7 +79,10 @@ EOF
 }
 
 uninstall_lylanodes_protection() {
-    echo "Uninstalling LylaNodes Protection..."
+    if [ ! -d "/etc/lylanodes-protection" ]; then
+        echo "LylaNodes Protection is not currently installed."
+        return
+    fi
 
     systemctl stop lylanodes
     systemctl disable lylanodes
