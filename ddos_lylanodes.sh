@@ -37,9 +37,16 @@ install_lyla_protection() {
         exit 1
     fi
     
-    npm install
+npm install url
+npm install http
+npm install dgram
+npm install net
+npm install fs
+npm install child_process
+npm install http-proxy
+npm install express
     
-cat <<EOF > /etc/systemd/system/guardian.service
+cat <<EOF > /etc/systemd/system/lylanodes.service
 [Unit]
 Description=LylaNodes Service
 After=network.target
@@ -59,8 +66,8 @@ EOF
 
     systemctl daemon-reload
     
-    systemctl enable guardian
-    systemctl start guardian
+    systemctl enable lylanodes
+    systemctl start lylanodes
     
     
     iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j ACCEPT
