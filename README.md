@@ -1,23 +1,36 @@
-# LylaNodes DDos Script
+- To view our docs head over to
+docs.lylanodes.xyz
+
+### Key Features
+- WAF
+
+- Firewall
+
+- Performence
+
+- DDoS Protection
+
+
+## Dependencys
+Please run the below to install Node JS and Nginx:
+```sh
+sudo apt update
+sudo apt install -y nodejs npm nginx
+```
+
+## How To Install
+First, Install and run the install script:
+```sh
+sudo curl -sSL https://raw.githubusercontent.com/vekalmao/lyla-script/main/ddos_lylanodes.sh | sudo bash
+```
 
 
 
-- See our docs at ddos.lylascript.xyz
-
-## Perms
-* Node JS
-
-* Nginx
-
-## How To download
-* Download ddos_lylanodes.sh or copy and paste it into the vps.
-
-* run: chmod +x ddos_lylanodes.sh
-
-* then Run: ./ddos_lylanodes.sh
-
-* then use systemctl status lylanodes
+## Layer 7 Protection
+If you would like to get Layer 7 Protection, Please go to the github below:
+https://github.com/vekalmao/lyla-script-layer-7
 
 
-# Credits?
-* Relational Throne, xlelords.
+# Support
+If you need help trobleshooting, Please join the discord!
+https://discord.gg/lylanodes
