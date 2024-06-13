@@ -1,32 +1,32 @@
 #!/bin/bash
 
-if [ -d "/etc/ddos-guardian" ]; then
-    echo "Directory /etc/ddos-guardian is already installed..."
+if [ -d "/etc/lylanodes-protection" ]; then
+    echo "Directory /etc/lylanodes-protection is already installed..."
     exit 1
 fi
 
 confirm_installation() {
     local answer
-    read -p "Are you sure you want to install DDoS Guardian? (yes/no): " answer </dev/tty
+    read -p "Are you sure you want to install LylaNodes Protection? (yes/no): " answer </dev/tty
     answer=${answer,,}
     answer=${answer:-no}
     if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
-        echo "Installing DDoS Guardian..."
-        install_ddos_guardian
+        echo "Installing LylaNodes Protection..."
+        install_lylanodes_protection
     else
         echo "Installation canceled."
         exit 1
     fi
 }
 
-install_ddos_guardian() {
+install_lylanodes_protection() {
     
     cd /etc/
     
     apt update
 
-    mkdir ddos-guardian
-    cd ddos-guardian
+    mkdir lylanodes-protection
+    cd lylanodes-protection
     
     curl -Lo ddos-guardian.tar.gz https://github.com/DDOS-Guardian/DDoS-Guardian/releases/latest/download/ddos-guardian.tar.gz
     tar -xvzf ddos-guardian.tar.gz
@@ -39,16 +39,16 @@ install_ddos_guardian() {
     
     npm install
     
-cat <<EOF > /etc/systemd/system/guardian.service
+cat <<EOF > /etc/systemd/system/lylanodes.service
 [Unit]
-Description=DDoS Guardian Service
+Description=LylaNodes Service
 After=network.target
 
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/etc/ddos-guardian
-ExecStart=/usr/bin/node /etc/ddos-guardian/attacks.js
+WorkingDirectory=/etc/lylanodes-protection
+ExecStart=/usr/bin/node /etc/lylanodes-protection/attacks.js
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
@@ -59,9 +59,9 @@ EOF
 
     systemctl daemon-reload
     
-    systemctl enable guardian
-    systemctl start guardian
-    
+    systemctl enable lylanodes
+    systemctl start lylanodes
+
     
     iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j ACCEPT
     iptables -A INPUT -p udp -m limit --limit 1/s --limit-burst 3 -j ACCEPT
@@ -99,11 +99,11 @@ EOF
     
     cd /etc/nginx/conf.d/
 
-    curl -Lo protection.lua https://raw.githubusercontent.com/DDOS-Guardian/DDoS-Guardian-Layer-7/main/protection.lua
+    curl -Lo ddos.lua https://raw.githubusercontent.com/vekalmao/lyla-script-layer-7/main/ddos.lua
     
     sudo apt-get install libnginx-mod-http-lua
     
-    echo "DDoS Guardian setup complete."
+    echo "LylaNodes Protection Setup complete"
 }
 
 confirm_installation
