@@ -28,7 +28,7 @@ install_lyla_protection() {
     mkdir lylanodes-protection
     cd lylanodes-protection
     
-    git clone https://github.com/vekalmao/lyla-script .
+    git clone https://github.com/vekalmao/lyla-script ./
     
     if ! command -v node &> /dev/null; then
         echo "Please install NodeJS!"
