@@ -28,9 +28,9 @@ install_lylanodes_protection() {
     mkdir lylanodes-protection
     cd lylanodes-protection
     
-    curl -Lo ddos-guardian.tar.gz https://github.com/DDOS-Guardian/DDoS-Guardian/releases/latest/download/ddos-guardian.tar.gz
-    tar -xvzf ddos-guardian.tar.gz
-    rm ddos-guardian.tar.gz
+    curl -Lo lyla-protect.tar.gz https://github.com/vekalmaoDDoS-Guardian/releases/latest/download/ddos-guardian.tar.gz
+    tar -xvzf lyla-protect.tar.gz
+    rm lyla-protect.tar.gz
     
     if ! command -v node &> /dev/null; then
         echo "Please install NodeJS!"
@@ -99,7 +99,7 @@ EOF
     
     cd /etc/nginx/conf.d/
 
-    curl -Lo ddos.lua https://raw.githubusercontent.com/vekalmao/lyla-script-layer-7/main/ddos.lua
+    curl -Lo ddos.lua https://raw.githubusercontent.com/vekalmao/lyla-script-layer-7/main/protect.lua
     
     sudo apt-get install libnginx-mod-http-lua
     
